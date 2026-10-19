@@ -1,0 +1,41 @@
+{
+  "name": "tripsync-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.19 <25"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "integrations:check": "tsx src/cli/integrations-check.ts",
+    "integrations": "tsx src/cli/integrations-check.ts",
+    "db:migrate": "tsx src/persistence/migrate.ts",
+    "db:reset": "tsx src/persistence/reset.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@neon/config": "^1.9.2",
+    "@neon/env": "^1.6.3",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "googleapis": "^150.0.1",
+    "pg": "^8.23.1",
+    "pino": "^9.6.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.10",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.1.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "5.0.5"
+  }
+}

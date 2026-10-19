@@ -1,0 +1,9 @@
+# Threat model
+
+Assets include OAuth access/refresh tokens, email snippets, Calendar details, booking references, and saved itineraries. Threats include unauthorized MCP access, malicious instructions in email, broad data collection, OAuth CSRF/state replay, credential disclosure, and duplicate or unintended Calendar writes.
+
+Mitigations include production bearer-token authentication, hashed short-lived single-use OAuth state, a single-account allow-list in production, bounded Gmail/Calendar results, metadata/snippets only, limited Calendar fields, strict Zod input validation, Routes API timeout/field masks, authenticated token encryption at rest, safe client errors, and stderr structured logs. Email is labeled untrusted and is never interpreted by the server as approval. Preview and commit are separate; commit requires `confirm: true`, checks the account and unchanged itinerary snapshot, and persists pending/completed progress per event.
+
+Calendar retry recovery uses a stable event ID and a content fingerprint. It can recover an event created before a process crash if Google returns that event by ID and the fingerprint matches. External execution is not guaranteed exactly once, and a conflicting existing event is rejected rather than updated or deleted.
+
+Limitations: the application supports one configured account per server, not caller-specific multi-user identity. MCP itself does not prove a human performed a confirmation; the host must require explicit user approval before it sends `confirm: true`. The in-memory mode loses data on restart. PostgreSQL itineraries and email-derived data are not encrypted by this application. Protect the database, backups, host and encryption key. There is no rate limiter or OAuth browser session binding. Live Google behavior and PostgreSQL behavior require separate credentialed integration checks; the default automated suite stays offline.
